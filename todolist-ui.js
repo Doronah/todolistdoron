@@ -149,7 +149,10 @@ function renderListItem(item) {
   editInput.className = "edit";
   li.appendChild(editInput);
   list.appendChild(li);
+  createEdit()
  }
+
+ 
 
 
 function renderList() {
@@ -158,7 +161,6 @@ function renderList() {
   todolist.forEach(function (item) {
     renderListItem(item);
     todo.textContent = todolist.length-count_completed() + " item left";
-    createEdit ()
   });
 }
 
