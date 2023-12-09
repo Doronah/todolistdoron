@@ -22,3 +22,11 @@ function addTask(title) {
     
   }
   
+  function searchAndUpdate(sour,tar){
+    for(let i = 0;i<todolist.length;i++){
+      if (todolist[i].title===sour){
+        todolist[i].title = tar;
+      }
+    }
+    console.log(todolist);
+  }
