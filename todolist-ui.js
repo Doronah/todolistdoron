@@ -1,6 +1,8 @@
 let isEditing = false;
+// Variables used to store the previous and new values for updating after edit
 let sour = "";
 let tar = "";
+// DOM elements
 const newTodoInput = document.getElementsByClassName('new-todo')[0];
 const list = document.getElementsByClassName('todo-list')[0];
 const complete = document.getElementById('comp');
@@ -11,16 +13,10 @@ const tog = document.getElementById('toggle-all');
 const fil = document.getElementsByClassName('filters');
 const todo = document.getElementsByClassName('todo-count')[0];
 todo.textContent = todolist.length-count_completed() + " item left";
-const todoListItems = document.getElementsByClassName('todo-list')[0].getElementsByTagName('li');
 
 
-
-
-
-
-
-
-
+// Event listener for the "Toggle All" button. 
+//Will move everything to "completed" status if there was at least one task that is in an active state
 tog.addEventListener('click',function(){
   clr.style.display = 'block';
   if(todolist.length === count_completed()){
@@ -39,7 +35,7 @@ tog.addEventListener('click',function(){
 }
 );
 
-
+//// Event listener for pressing the "Enter" key when you want to add a task.
 newTodoInput.addEventListener('keydown', function addItemListener(e) {
   if (e.key === 'Enter') {
     addTask(newTodoInput.value);
@@ -60,7 +56,7 @@ newTodoInput.addEventListener('keydown', function addItemListener(e) {
 });
 
 
-
+// Event listener for clicking the "Completed" button in the filter
 comp.addEventListener('click', function () {
   const selectedLink = document.querySelector('.filters a.selected');
   if (selectedLink) {
@@ -72,7 +68,7 @@ comp.addEventListener('click', function () {
 });
 
 
-
+// Event listener for clicking the "Active" button in the filter
 active.addEventListener('click', function () {
   const selectedLink = document.querySelector('.filters a.selected');
 if (selectedLink) {
@@ -84,7 +80,7 @@ newSelectedLink.classList.add('selected');
 });
 
 
-
+// Event listener for clicking the "All" button in the filter
 all.addEventListener('click', function () {
   const selectedLink = document.querySelector('.filters a.selected');
   if (selectedLink) {
@@ -96,7 +92,7 @@ all.addEventListener('click', function () {
 });
 
 
-
+// Event listener for clicking the "Clear Completed" button
 clr.addEventListener('click',function(){
   while(count_completed()){
     todolist.forEach(function(item){
@@ -110,6 +106,7 @@ clr.addEventListener('click',function(){
 });
 
 
+//build and rend a single list item and after call the renderList function
 
 function renderListItem(item) {
   const li = document.createElement('li');
@@ -150,43 +147,32 @@ function renderListItem(item) {
   li.appendChild(div);
   const editInput = document.createElement("input");
   editInput.className = "edit";
-//--------------------------------------------------------------------------------
+//addEventListener to double click when you want to edit a task/
   li.addEventListener('dblclick', function () {
     isEditing = true;
     editInput.value = label.textContent;
-    console.log(editInput.value);
     sour=editInput.value;
     li.classList.add("editing");
     editInput.focus();
   
   })
-  
+  //addEventListener to enter key and Exit editing mode
   li.addEventListener("keydown", function addItemListener(e) {
     if (e.key === "Enter") {
       li.classList.remove("editing");
       label.textContent = editInput.value;
       tar = editInput.value;
+        //store the new text in the todolist array 
       searchAndUpdate(sour,tar);
     }
   }
   );
-  /*
-  document.addEventListener('click', function () {
-    if (isEditing) {
-      isEditing = false;
-      li.classList.remove("editing");
-      label.textContent = editInput.value;
-    }
-    searchAndUpdate(sour,tar);
-  });*/
-//----------------------------------------------------------------------------
   li.appendChild(editInput);
   list.appendChild(li);
-
  }
 
- 
 
+// Function to render the entire list
 function renderList() {
   newTodoInput.value = '';
   list.innerHTML = '';
@@ -197,10 +183,7 @@ function renderList() {
   });
 }
 
-
-
-
-
+// Function to render only completed items
 function renderListComp() {
    newTodoInput.value = '';
    list.innerHTML = '';
@@ -212,7 +195,7 @@ function renderListComp() {
    });
 }
 
-
+// Function to render only active items
 function renderListAct() {
   newTodoInput.value = '';
   list.innerHTML = '';
@@ -224,7 +207,7 @@ function renderListAct() {
   todo.textContent = todolist.length-count_completed() + " item left"
 }
 
-
+// Function to render the list after removing completed items
 function renderListDeleteComp() {
   newTodoInput.value = '';
   list.innerHTML = '';
@@ -238,7 +221,7 @@ function renderListDeleteComp() {
   todo.textContent = todolist.length-count_completed() + " item left"
 }
 
-
+// Function to count the number of completed items
 function count_completed(){
   counter=0;
   todolist.forEach(function(item){
@@ -255,28 +238,5 @@ function whitch_filter(){
   return selectedLink.id;
 }
 
-
-
-
-
-
-/*work with problems!!!!!!!!!!!!!
-function createEdit() {
-  for (let i = 0; i < todoListItems.length; i++) {
-      const listItem = todoListItems[i];
-
-      listItem.addEventListener('dblclick', function () {
-          const label = listItem.querySelector('label');
-          label.contentEditable = true;
-          label.focus();
-          label.addEventListener('blur', function () {
-              label.contentEditable = false;
-          });
-          console.log(label.textContent);
-          console.log(i);
-          todolist[i]=label.textContent;
-      });
-  }
-}*/
 
 
