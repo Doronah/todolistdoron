@@ -1,3 +1,6 @@
+let isEditing = false;
+let sour = "";
+let tar = "";
 const newTodoInput = document.getElementsByClassName('new-todo')[0];
 const list = document.getElementsByClassName('todo-list')[0];
 const complete = document.getElementById('comp');
@@ -147,19 +150,49 @@ function renderListItem(item) {
   li.appendChild(div);
   const editInput = document.createElement("input");
   editInput.className = "edit";
+//--------------------------------------------------------------------------------
+  li.addEventListener('dblclick', function () {
+    isEditing = true;
+    editInput.value = label.textContent;
+    console.log(editInput.value);
+    sour=editInput.value;
+    li.classList.add("editing");
+    editInput.focus();
+  
+  })
+  
+  li.addEventListener("keydown", function addItemListener(e) {
+    if (e.key === "Enter") {
+      li.classList.remove("editing");
+      label.textContent = editInput.value;
+      tar = editInput.value;
+      searchAndUpdate(sour,tar);
+    }
+  }
+  );
+  /*
+  document.addEventListener('click', function () {
+    if (isEditing) {
+      isEditing = false;
+      li.classList.remove("editing");
+      label.textContent = editInput.value;
+    }
+    searchAndUpdate(sour,tar);
+  });*/
+//----------------------------------------------------------------------------
   li.appendChild(editInput);
   list.appendChild(li);
-  createEdit()
+
  }
 
  
-
 
 function renderList() {
   newTodoInput.value = '';
   list.innerHTML = '';
   todolist.forEach(function (item) {
-    renderListItem(item);
+  const li = document.createElement('li');
+  renderListItem(item);
     todo.textContent = todolist.length-count_completed() + " item left";
   });
 }
@@ -222,92 +255,28 @@ function whitch_filter(){
   return selectedLink.id;
 }
 
-/*
-function createEdit (){
-  for (let i = 0; i < todoListItems.length; i++) {
-    const listItem = todoListItems[i];
 
-    listItem.addEventListener('dblclick', function () {
-        const label = listItem.querySelector('label');
-        label.contentEditable = true;
-        label.focus();
-        todolist[i].title = lable.textContent;
-        label.addEventListener('blur', function () {
-        label.contentEditable = false;
-        });
-      todolist[i]=lable.textContent;
-    });
-}
+
+
+
+
+/*work with problems!!!!!!!!!!!!!
+function createEdit() {
+  for (let i = 0; i < todoListItems.length; i++) {
+      const listItem = todoListItems[i];
+
+      listItem.addEventListener('dblclick', function () {
+          const label = listItem.querySelector('label');
+          label.contentEditable = true;
+          label.focus();
+          label.addEventListener('blur', function () {
+              label.contentEditable = false;
+          });
+          console.log(label.textContent);
+          console.log(i);
+          todolist[i]=label.textContent;
+      });
+  }
 }*/
 
-function createEdit (){
-let isEditing = false;
 
-li.addEventListener('dblclick', function () {
-  isEditing = true;
-  editInput.value = label.textContent;
-  li.classList.add("editing");
-  editInput.focus();
-
-})
-
-li.addEventListener("keydown", function addItemListener(e) {
-  if (e.key === "Enter") {
-    li.classList.remove("editing");
-    label.textContent = editInput.value;
-  }
-}
-);
-
-document.addEventListener('click', function () {
-  if (isEditing) {
-    isEditing = false;
-    li.classList.remove("editing");
-    label.textContent = editInput.value;
-  }
-});
-}
-
-
-
-
-
-
-
-
-
-
-/*
-function saveEdit() {
-  for (let i = 0; i < todoListItems.length; i++) {
-    const listItem = todoListItems[i];
-    const label = listItem.querySelector('label');
-
-    label.addEventListener('blur', function () {
-      label.contentEditable = false;
-      // כאן ניתן להוסיף קוד נוסף לשמירת השינויים, כמו לדוגמה:
-      const itemId = listItem.dataset.itemId;
-      const updatedText = label.textContent.trim();
-      updateItemTitle(itemId, updatedText);
-      renderList(); // לאחר שמירת השינוי, רענן את הרשימה
-    });
-
-    label.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        label.blur(); // כאשר המשתמש לוחץ Enter, סגור את תיבת הטקסט
-      }
-    });
-  }
-}
-
-function updateItemTitle(itemId, updatedText) {
-  // חיפוש לפי המזהה במערכת ועדכון הטקסט
-  const itemToUpdate = todolist.find(item => item.id === itemId);
-
-  if (itemToUpdate) {
-    itemToUpdate.title = updatedText;
-  } else {
-    console.error(`Item with ID ${itemId} not found.`);
-  }
-}
-*/
